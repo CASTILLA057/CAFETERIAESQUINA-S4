@@ -191,6 +191,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_gestion_reservasActionPerformed
 
     private void ConsultarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultarClienteActionPerformed
+        
         String input = JOptionPane.showInputDialog("Ingrese el documento del cliente:");
         if (input != null && !input.isEmpty()) {
             try {
@@ -201,7 +202,6 @@ public class Menu extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Documento inválido, debe ser numérico.");
             }
         }
-
     }//GEN-LAST:event_ConsultarClienteActionPerformed
 
     private void Liberar_mesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Liberar_mesaActionPerformed
@@ -211,72 +211,90 @@ public class Menu extends javax.swing.JFrame {
 
     private void CantidadClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CantidadClientesActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(rootPane, """
-                                                Las consultas disponibles son las siguientes:
-                                                1. Total de clientes en la semana.
-                                                2. Total de clientes por d\u00eda de la semana.
-                                                3. Total de clientes por mesas en la semana.
-                                                4. Dia de la semana que mas clientes llegan.
-                                                ------Seleccione otro valor para salir-------
-                                                   """);
-        try {
-            String input = JOptionPane.showInputDialog("Ingrese la opcion deseada").trim();
-            if (input == null || input.trim().isEmpty()) {
-                JOptionPane.showMessageDialog(rootPane, "No se ingresó ningun valor valido");
-                return;
-            }
-            int Opcion = Integer.parseInt(input);
-            if (Opcion < 1 || Opcion > 4) {
-                return;
-            }
-            ListaReservas lista = objectCafeteria.getListaReservas();
-            switch (Opcion) {
-                case 1:
-                    JOptionPane.showMessageDialog(rootPane, "Total de clientes en la semana: " + lista.totalClientesSemana());
-                    break;
-                case 2:
-                    String dia = JOptionPane.showInputDialog("Ingrese un dia de la semana: ");
-                    if(dia!=null && !dia.isEmpty()){
-                        int total = lista.totalClintesPorDia(dia);
-                        if(total == 0){
-                            JOptionPane.showMessageDialog(rootPane, "No hay reservas para el dia: " + dia);
-                        }
-                    }else{
-                        JOptionPane.showMessageDialog(rootPane, "Total clientes para el dia: " + dia + ": " + lista.totalClintesPorDia(dia));
-                    }
-                    break;
-                case 3:
-                    String inputMesa = JOptionPane.showInputDialog("Ingrese el numero de la mesa");
-                    if (inputMesa == null || inputMesa.trim().isEmpty()) {
-                        return;
-                    }
-                    if (!inputMesa.trim().matches("\\d+")) {
-                        JOptionPane.showMessageDialog(rootPane, "Ingrese un número válido");
-                        return;
-                    }
+JOptionPane.showMessageDialog(rootPane, """
+                                        Las consultas disponibles son las siguientes:
+                                        1. Total de clientes en la semana.
+                                        2. Total de clientes por día de la semana.
+                                        3. Total de clientes por mesas en la semana.
+                                        4. Día de la semana que más clientes llegan.
+                                        ------Seleccione otro valor para salir-------
+                                           """);
 
-                    int NumMesa = Integer.parseInt(inputMesa.trim());
+while (true) {
+    String input = JOptionPane.showInputDialog("Ingrese la opción deseada");
 
-                    if (NumMesa < 1 || NumMesa > objectCafeteria.getArr_mesas().length) {
-                        JOptionPane.showMessageDialog(rootPane, "Número de mesa fuera de rango. Debe ser entre 1 y " + objectCafeteria.getArr_mesas().length);
-                        return;
-                    }
+    if (input == null) {
+        JOptionPane.showMessageDialog(rootPane, "Operación cancelada.");
+        return;
+    }
 
-                    JOptionPane.showMessageDialog(rootPane, "Clientes en la mesa " + NumMesa + ": " + lista.totalClientesPorMesa(NumMesa));
-                    break;
 
-                case 4:
-                    
-                    JOptionPane.showMessageDialog(rootPane, "Los dias con mas clientes es: " + lista.diaConMasClientes());
-                    break;
+    if (input.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(rootPane, "No se ingresó ningún valor válido, inténtelo de nuevo.");
+        continue;
+    }
 
-                default:
-                    JOptionPane.showMessageDialog(rootPane, "Opcion no valida, Intente de nuevo.");
-            }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(rootPane, "Opcion no valida");
-           
+    try {
+        int opcion = Integer.parseInt(input.trim());
+
+        if (opcion < 1 || opcion > 4) {
+            JOptionPane.showMessageDialog(rootPane, "Opción fuera de rango. Intente nuevamente.");
+            continue;
         }
+
+        ListaReservas lista = objectCafeteria.getListaReservas();
+
+        switch (opcion) {
+            case 1:
+                JOptionPane.showMessageDialog(rootPane, "Total de clientes en la semana: " + lista.totalClientesSemana());
+                break;
+
+            case 2:
+                String dia = JOptionPane.showInputDialog("Ingrese un día de la semana:");
+                if (dia == null || dia.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, "Entrada no válida. Debe ingresar un día.");
+                    continue; 
+                }
+                int total = lista.totalClintesPorDia(dia);
+                if (total == 0) {
+                    JOptionPane.showMessageDialog(rootPane, "No hay reservas para el día: " + dia);
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Total clientes para el día " + dia + ": " + total);
+                }
+                break;
+
+            case 3:
+                String inputMesa = JOptionPane.showInputDialog("Ingrese el número de la mesa");
+                if (inputMesa == null || inputMesa.trim().isEmpty()) {
+                    JOptionPane.showMessageDialog(rootPane, "Entrada no válida.");
+                    continue;
+                }
+                if (!inputMesa.matches("\\d+")) {
+                    JOptionPane.showMessageDialog(rootPane, "Debe ingresar un número válido.");
+                    continue;
+                }
+
+                int numMesa = Integer.parseInt(inputMesa.trim());
+                if (numMesa < 1 || numMesa > objectCafeteria.getArr_mesas().length) {
+                    JOptionPane.showMessageDialog(rootPane, "Número de mesa fuera de rango. Debe estar entre 1 y " + objectCafeteria.getArr_mesas().length);
+                    continue;
+                }
+
+                JOptionPane.showMessageDialog(rootPane, "Clientes en la mesa " + numMesa + ": " + lista.totalClientesPorMesa(numMesa));
+                break;
+
+            case 4:
+                JOptionPane.showMessageDialog(rootPane, "El día con más clientes es: " + lista.diaConMasClientes());
+                break;
+        }
+
+        break;
+
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(rootPane, "Debe ingresar un número válido.");
+    }
+}
+
     }//GEN-LAST:event_CantidadClientesActionPerformed
 
     public static void main(String args[]) {
