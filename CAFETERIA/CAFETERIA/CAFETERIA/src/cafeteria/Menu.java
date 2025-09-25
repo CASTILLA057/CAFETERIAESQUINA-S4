@@ -225,7 +225,7 @@ JOptionPane.showMessageDialog(rootPane, """
                                         2. Total de clientes por día de la semana.
                                         3. Total de clientes por mesas en la semana.
                                         4. Día de la semana que más clientes llegan.
-                                        ------Seleccione otro valor para salir-------
+                                        5. salir.
                                            """);
 while (true) {
     String input = JOptionPane.showInputDialog("Ingrese la opción deseada");
@@ -240,7 +240,7 @@ while (true) {
     try {
         int opcion = Integer.parseInt(input.trim());
 
-        if (opcion < 1 || opcion > 4) {
+        if (opcion < 1 || opcion > 5) {
             JOptionPane.showMessageDialog(rootPane, "Opción fuera de rango. Intente nuevamente.");
             continue;
         }
@@ -285,6 +285,10 @@ while (true) {
 
             case 4:
                 JOptionPane.showMessageDialog(rootPane, "El día con más clientes es: " + lista.diaConMasClientes());
+                break;
+                
+            case 5 : 
+                JOptionPane.showMessageDialog(rootPane, "Cancelando proceso");
                 break;
         }
 
