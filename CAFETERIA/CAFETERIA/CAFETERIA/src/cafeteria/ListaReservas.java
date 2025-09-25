@@ -23,7 +23,6 @@ public class ListaReservas {
         this.cabeza = null;
     }
 
-    
     public void agregarReserva(Reserva reserva) {
         Nodo nuevo = new Nodo(reserva);
         if (cabeza == null) {
@@ -37,9 +36,6 @@ public class ListaReservas {
         }
     }
 
-    
-    
-    
     public void mostrarReservas() {
         Nodo actual = cabeza;
         if (actual == null) {
@@ -50,6 +46,7 @@ public class ListaReservas {
             actual = actual.siguiente;
         }
     }
+    
     public int totalClientesSemana(){
         int total = 0;
         Nodo actual = cabeza;
@@ -59,6 +56,7 @@ public class ListaReservas {
         }
         return total;
     }
+    
     public int totalClintesPorDia(String dia){
         int total = 0;
         Nodo actual = cabeza;
@@ -71,6 +69,7 @@ public class ListaReservas {
         return total;
     
     }
+    
     public int totalClientesPorMesa(int NumMesa){
         int total = 0;
         Nodo actual = cabeza;
@@ -82,7 +81,8 @@ public class ListaReservas {
         }
         return total;
     }
-            public String diaConMasClientes() {
+    
+    public String diaConMasClientes() {
         if (cabeza == null) return "No hay reservas aún.";
         Map<String, Integer> conteo = new HashMap<>();
         Nodo actual = cabeza;
@@ -106,30 +106,33 @@ public class ListaReservas {
         return mejorDia + " (" + max + " clientes)";
     }
   
- public String consultarCliente(long clienteId) {
-        Nodo actual = cabeza;
-        while (actual != null) {
-            if (actual.reserva.getClienteId() == clienteId) {
-                int mesa = actual.reserva.getMesa();
-                String dia = actual.reserva.getDia();
-                int totalMesaDia = 0;
-                Nodo aux = cabeza;
-                while (aux != null) {
-                    if (aux.reserva.getMesa() == mesa &&
-                        aux.reserva.getDia() != null &&
-                        aux.reserva.getDia().equalsIgnoreCase(dia)) {
-                        totalMesaDia++;
-                    }
-                    aux = aux.siguiente;
+public String consultarCliente(long clienteId) {
+    Nodo actual = cabeza;
+
+    while (actual != null) {
+        if (actual.reserva.getClienteId() == clienteId) {
+            int mesa = actual.reserva.getMesa();
+            String dia = actual.reserva.getDia();
+            int totalMesaDia = 0;
+
+            Nodo aux = cabeza;
+            while (aux != null) {
+                if (aux.reserva.getMesa() == mesa &&
+                    aux.reserva.getDia() != null &&
+                    aux.reserva.getDia().equalsIgnoreCase(dia)) {
+                    totalMesaDia++;
                 }
-                return "Cliente con documento " + clienteId +
-                       " atendió en la mesa " + mesa +
-                       " el día " + dia +
-                       ". Total de reservas en esa mesa ese día: " + totalMesaDia;
+                aux = aux.siguiente;
             }
-            actual = actual.siguiente;
+
+            return "Cliente con documento " + clienteId +
+                   " reservado en mesa " + mesa +
+                   " el día " + dia +
+                   ". Total de clientes en esa mesa ese día: " + totalMesaDia;
         }
-        return "Cliente con documento " + clienteId + " no encontrado.";
-        
+        actual = actual.siguiente;
     }
+
+    return null;
+}
 }

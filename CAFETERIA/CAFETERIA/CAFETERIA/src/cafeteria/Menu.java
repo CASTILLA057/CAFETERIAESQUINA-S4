@@ -192,21 +192,29 @@ public class Menu extends javax.swing.JFrame {
 
     private void ConsultarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultarClienteActionPerformed
         
-        String input = JOptionPane.showInputDialog("Ingrese el documento del cliente:");
-        if (input != null && !input.isEmpty()) {
-            try {
-                long documento = Long.parseLong(input);
-                String resultado = objectCafeteria.ConsultarCliente(documento);
-                JOptionPane.showMessageDialog(null, resultado);
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Documento inválido, debe ser numérico.");
-            }
+    String docStr = JOptionPane.showInputDialog("Ingrese el documento del cliente:");
+
+    if (docStr == null || docStr.trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Debe ingresar un documento válido.");
+        return;
+    }
+    try {
+        long documento = Long.parseLong(docStr.trim());
+        String resultado = objectCafeteria.getListaReservas().consultarCliente(documento);
+
+        if (resultado == null || resultado.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "No se encontró cliente con documento: " + documento);
+        } else {
+            JOptionPane.showMessageDialog(null, resultado);
         }
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(null, "Debe ingresar un número válido.");
+    }
+
     }//GEN-LAST:event_ConsultarClienteActionPerformed
 
     private void Liberar_mesaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Liberar_mesaActionPerformed
         objectCafeteria.liberarMesa();
-
     }//GEN-LAST:event_Liberar_mesaActionPerformed
 
     private void CantidadClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CantidadClientesActionPerformed
@@ -219,21 +227,16 @@ JOptionPane.showMessageDialog(rootPane, """
                                         4. Día de la semana que más clientes llegan.
                                         ------Seleccione otro valor para salir-------
                                            """);
-
 while (true) {
     String input = JOptionPane.showInputDialog("Ingrese la opción deseada");
-
     if (input == null) {
         JOptionPane.showMessageDialog(rootPane, "Operación cancelada.");
         return;
     }
-
-
     if (input.trim().isEmpty()) {
         JOptionPane.showMessageDialog(rootPane, "No se ingresó ningún valor válido, inténtelo de nuevo.");
         continue;
     }
-
     try {
         int opcion = Integer.parseInt(input.trim());
 
@@ -241,14 +244,12 @@ while (true) {
             JOptionPane.showMessageDialog(rootPane, "Opción fuera de rango. Intente nuevamente.");
             continue;
         }
-
         ListaReservas lista = objectCafeteria.getListaReservas();
-
         switch (opcion) {
             case 1:
                 JOptionPane.showMessageDialog(rootPane, "Total de clientes en la semana: " + lista.totalClientesSemana());
                 break;
-
+                
             case 2:
                 String dia = JOptionPane.showInputDialog("Ingrese un día de la semana:");
                 if (dia == null || dia.trim().isEmpty()) {
@@ -273,13 +274,12 @@ while (true) {
                     JOptionPane.showMessageDialog(rootPane, "Debe ingresar un número válido.");
                     continue;
                 }
-
+                
                 int numMesa = Integer.parseInt(inputMesa.trim());
                 if (numMesa < 1 || numMesa > objectCafeteria.getArr_mesas().length) {
                     JOptionPane.showMessageDialog(rootPane, "Número de mesa fuera de rango. Debe estar entre 1 y " + objectCafeteria.getArr_mesas().length);
                     continue;
                 }
-
                 JOptionPane.showMessageDialog(rootPane, "Clientes en la mesa " + numMesa + ": " + lista.totalClientesPorMesa(numMesa));
                 break;
 
